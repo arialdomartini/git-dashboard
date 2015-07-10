@@ -3,9 +3,9 @@ w() {
 }
 
 dn() {
-    git status --short --branch | grep '^.[DM\?]' | head -1 | awk '$1 ~ /[MD]/ {print $2} $1 ~ /\?/ {print "/dev/null " $2}' | xargs git diff -- && w
+    git status --short | grep '^.[DM?]' | awk 'NR==1{print ($1=="?" ? "/dev/null" : ""), $2}' | xargs git diff -- && w
 }
 
 an() {
-    git status --short --branch | grep '^.[DM\?]' | head -1 | awk '$1 ~ /[M?]/ {print "add " $2} $1 ~ /D/ {print "rm " $2}' | xargs git && w
+    git status --short | grep '^.[DM?]' | awk 'NR==1{print ($1=="D" ? "rm" : "add"), $2}' | xargs git && w
 }
